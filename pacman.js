@@ -1,12 +1,44 @@
 // Setup initial game stats
 var score = 0;
 var lives = 2;
+var powerPellets = 4;
 
 
 // Define your ghosts here
 
-// replace this comment with your four ghosts setup as objects
+var inky = {
+  menu_option: '1',
+  name: 'Inky',
+  colour: 'Red',
+  character: 'Shadow',
+  edible: false
+};
 
+var blinky = {
+  menu_option: '2',
+  name: 'Blinky',
+  colour: 'Cyan',
+  character: 'Speedy',
+  edible: false
+};
+
+var pinky = {
+  menu_option: '3',
+  name: 'Pinky',
+  colour: 'Pink',
+  character: 'Bashful',
+  edible: false
+};
+
+var clyde = {
+  menu_option: '4',
+  name: 'Clyde',
+  colour: 'Orange',
+  character: 'Pokey',
+  edible: false
+};
+
+var ghosts = [inky, blinky, pinky, clyde]
 
 // Draw the screen functionality
 function drawScreen() {
@@ -24,11 +56,15 @@ function clearScreen() {
 
 function displayStats() {
   console.log('Score: ' + score + '     Lives: ' + lives);
+  console.log('\n\n\nPower Pellets: ' + powerPellets);
 }
 
 function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
-  console.log('(d) Eat Dot');
+  console.log('(d) eat Dot');
+  for (var i = 0; i < ghosts.length; i++) {
+    console.log("(" + (i + 1) + ") eat " + ghosts[i].name );
+  }
   console.log('(q) Quit');
 }
 
@@ -44,6 +80,19 @@ function eatDot() {
   score += 10;
 }
 
+function eatGhost(num) {
+  if (ghosts[num].edible === false) {
+    lives = lives - 1;
+    console.log('\nYou lost a life!');
+    if (lives === 0){
+      process.exit();
+    }
+}  else {
+  console.log('\nChomp!');
+  score += 10;
+  }
+}
+
 
 // Process Player's Input
 function processInput(key) {
@@ -54,6 +103,18 @@ function processInput(key) {
       break;
     case 'd':
       eatDot();
+      break;
+    case '1':
+      eatGhost(0);
+      break;
+    case '2':
+      eatGhost(1);
+      break;
+    case '3':
+      eatGhost(2);
+      break;
+    case '4':
+      eatGhost(3);
       break;
     default:
       console.log('\nInvalid Command!');
