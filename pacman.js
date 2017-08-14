@@ -62,8 +62,15 @@ function displayStats() {
 function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
   console.log('(d) eat Dot');
+  if (powerPellets >= 1) {
+  console.log('(p) eat Power Pellet');
+  }
   for (var i = 0; i < ghosts.length; i++) {
-    console.log("(" + (i + 1) + ") eat " + ghosts[i].name );
+    if (ghosts[i].edible === false) {
+    console.log("(" + (i + 1) + ") eat " + ghosts[i].name + " (inedible)");
+  } else {
+    console.log("(" + (i + 1) + ") eat " + ghosts[i].name + " (edible)");
+   }
   }
   console.log('(q) Quit');
 }
@@ -80,16 +87,30 @@ function eatDot() {
   score += 10;
 }
 
+function eatPowerPellet() {
+  if (powerPellets === 0) {
+    console.log('\nThere are no more Power Pellets left!');
+  } else {
+  powerPellets -= 1;
+  console.log('\nYou got POWER!!!');
+  score += 50;
+  for (var i = 0; i < ghosts.length; i++){
+    ghosts[i].edible = true;
+    }
+  }
+}
+
 function eatGhost(num) {
   if (ghosts[num].edible === false) {
     lives = lives - 1;
-    console.log('\nYou lost a life!');
+    console.log('\nYou were killed by a ' + ghosts[num].colour + " ghost named " + ghosts[num].name + ".");
     if (lives === 0){
       process.exit();
     }
 }  else {
-  console.log('\nChomp!');
-  score += 10;
+  ghosts[num].edible = false;
+  console.log('\nYou ate a ' + ghosts[num].character + " ghost!");
+  score += 200;
   }
 }
 
@@ -103,6 +124,9 @@ function processInput(key) {
       break;
     case 'd':
       eatDot();
+      break;
+    case 'p':
+      eatPowerPellet();
       break;
     case '1':
       eatGhost(0);
